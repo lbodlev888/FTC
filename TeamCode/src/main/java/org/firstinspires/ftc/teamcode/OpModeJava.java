@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -67,6 +69,19 @@ public class OpModeJava extends LinearOpMode {
             telemetry.addData("Macara Pos", macara.getCurrentPosition());
 
             telemetry.update();
+
+            double apucare = gamepad2.left_stick_y;
+            if(apucare != 0) {
+                macara.setMode(RUN_WITHOUT_ENCODER);
+                macara.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                macara.setDirection(DcMotorSimple.Direction.REVERSE);
+                if(apucare < 0) {
+                    macara.setDirection(DcMotorSimple.Direction.FORWARD);
+                    apucare = Math.abs(apucare);
+                }
+                macara.setPower(apucare);
+            }
+
             if(gamepad2.a){
                 macara.setTargetPosition(635);
                 macara.setMode(RUN_TO_POSITION);
@@ -79,7 +94,6 @@ public class OpModeJava extends LinearOpMode {
                 macara.setMode(RUN_TO_POSITION);
                 macara.setPower(0.3);
             }
-
 
             if (gamepad2.x)
                 incheietura.setPosition(0.6);
