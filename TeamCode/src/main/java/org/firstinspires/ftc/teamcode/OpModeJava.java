@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class OpModeJava extends LinearOpMode {
-    double targS = 0.5;
-    boolean lastX = false;
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -33,6 +31,12 @@ public class OpModeJava extends LinearOpMode {
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        //Scoatere din inertie
+        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
       // macara.setTargetPosition();
         double Incetinire = 1.0;
        waitForStart();
@@ -52,14 +56,13 @@ public class OpModeJava extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
-            Incetinire = 1.0 - gamepad1.right_trigger * 0.5;
+            //Incetinire = 1.0 - gamepad1.right_trigger * 0.5;
 
 
-            frontLeftMotor.setPower(frontLeftPower / denominator) ;
+            frontLeftMotor.setPower(frontLeftPower / denominator);
             backLeftMotor.setPower(backLeftPower / denominator);
             frontRightMotor.setPower(frontRightPower/ denominator);
             backRightMotor.setPower(backRightPower/ denominator);
-            int a = macara.getCurrentPosition();
 
             telemetry.addData("Macara Pos", macara.getCurrentPosition());
 
