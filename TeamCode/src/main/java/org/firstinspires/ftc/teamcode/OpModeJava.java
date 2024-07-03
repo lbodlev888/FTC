@@ -8,13 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class OpModeJava extends LinearOpMode {
+    DcMotor macara;
     @Override
     public void runOpMode() {
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get("LeftFront");
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("LeftBack");
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("RightFront");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("RightBack");
-        DcMotor macara = hardwareMap.dcMotor.get("Macara");
+        macara = hardwareMap.dcMotor.get("Macara");
         Servo incheietura = hardwareMap.servo.get("Incheietura");
         Servo gheara = hardwareMap.servo.get("Gheara");
         Servo lansareAvion = hardwareMap.servo.get("Avion");
@@ -29,6 +30,7 @@ public class OpModeJava extends LinearOpMode {
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        incheietura.setPosition(.4);
         waitForStart();
 
         if (isStopRequested()) return;
@@ -44,31 +46,13 @@ public class OpModeJava extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
+            if(gamepad1.left_trigger == 1)
+                denominator *= 2;
+
             frontLeftMotor.setPower(frontLeftPower / denominator);
             backLeftMotor.setPower(backLeftPower / denominator);
             frontRightMotor.setPower(frontRightPower / denominator);
             backRightMotor.setPower(backRightPower / denominator);
-
-            if(gamepad2.left_bumper) {
-                int pos = macara.getCurrentPosition();
-                while(gamepad2.left_bumper)
-                {
-                    macara.setTargetPosition(pos);
-                    macara.setMode(RUN_TO_POSITION);
-                    macara.setPower(0.3);
-                    pos++;
-                }
-            }
-            if(gamepad2.right_bumper) {
-                int pos = macara.getCurrentPosition();
-                while(gamepad2.right_bumper)
-                {
-                    macara.setTargetPosition(pos);
-                    macara.setMode(RUN_TO_POSITION);
-                    macara.setPower(0.3);
-                    pos--;
-                }
-            }
 
             if(gamepad2.a){
                 macara.setTargetPosition(585);
