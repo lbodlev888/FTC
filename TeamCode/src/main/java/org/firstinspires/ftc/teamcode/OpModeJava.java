@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
+
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,14 +11,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class OpModeJava extends LinearOpMode {
-    DcMotor macara;
     @Override
     public void runOpMode() {
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get("LeftFront");
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("LeftBack");
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("RightFront");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("RightBack");
-        macara = hardwareMap.dcMotor.get("Macara");
+        DcMotor macara = hardwareMap.dcMotor.get("Macara");
         Servo incheietura = hardwareMap.servo.get("Incheietura");
         Servo gheara = hardwareMap.servo.get("Gheara");
         Servo lansareAvion = hardwareMap.servo.get("Avion");
@@ -35,24 +37,28 @@ public class OpModeJava extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        while (opModeIsActive()) {
-            double y = -gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x * 1.1;
-            double rx = gamepad1.right_stick_x;
+        Thread th = new Thread(() -> {
+            if(gamepad2.left_bumper) {
+                int pos = macara.getCurrentPosition();
+                while(gamepad2.left_bumper)
+                {
+                    macara.setTargetPosition(pos);
+                    macara.setMode(RUN_TO_POSITION);
+                    macara.setPower(0.3);
+                    pos++;
+                }
+            }
 
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-
-            if(gamepad1.left_trigger == 1)
-                denominator *= 2;
-
-            frontLeftMotor.setPower(frontLeftPower / denominator);
-            backLeftMotor.setPower(backLeftPower / denominator);
-            frontRightMotor.setPower(frontRightPower / denominator);
-            backRightMotor.setPower(backRightPower / denominator);
+            if(gamepad2.right_bumper) {
+                int pos = macara.getCurrentPosition();
+                while(gamepad2.right_bumper)
+                {
+                    macara.setTargetPosition(pos);
+                    macara.setMode(RUN_TO_POSITION);
+                    macara.setPower(0.3);
+                    pos--;
+                }
+            }
 
             if(gamepad2.a){
                 macara.setTargetPosition(585);
@@ -77,6 +83,29 @@ public class OpModeJava extends LinearOpMode {
 
             if(gamepad2.dpad_up)
                 gheara.setPosition(0.57);
+        });
+
+        while (opModeIsActive()) {
+
+            if(!th.isAlive()) th.start();
+            else Log.d("Thread Info", "Nu merge");
+
+            double y = -gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x * 1.1;
+            double rx = gamepad1.right_stick_x;
+
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx) / denominator;
+            double backLeftPower = (y - x + rx) / denominator;
+            double frontRightPower = (y - x - rx) / denominator;
+            double backRightPower = (y + x - rx) / denominator;
+
+            if(gamepad1.left_trigger == 1) denominator *= 2;
+
+            frontLeftMotor.setPower(frontLeftPower / denominator);
+            backLeftMotor.setPower(backLeftPower / denominator);
+            frontRightMotor.setPower(frontRightPower / denominator);
+            backRightMotor.setPower(backRightPower / denominator);
 
             if(gamepad1.left_bumper)
                 lansareAvion.setPosition(0);
