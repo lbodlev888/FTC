@@ -9,8 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+
 @TeleOp
-public class OpModeJava extends LinearOpMode {
+public class ProgramBogdan extends LinearOpMode {
     @Override
     public void runOpMode() {
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get("LeftFront");
@@ -60,28 +61,28 @@ public class OpModeJava extends LinearOpMode {
                 }
             }
 
-            if(gamepad2.a){
+            if(gamepad2.right_stick_y < -0.3) {
                 macara.setTargetPosition(585);
                 macara.setMode(RUN_TO_POSITION);
                 macara.setPower(0.5);
             }
 
-            if(gamepad2.b) {
+            if(gamepad2.right_stick_y > 0.3) {
                 macara.setTargetPosition(65);
                 macara.setMode(RUN_TO_POSITION);
                 macara.setPower(0.3);
             }
 
-            if (gamepad2.x)
+            if (gamepad2.left_stick_y < -0.3)
                 incheietura.setPosition(0.6);
 
-            if (gamepad2.y)
+            if (gamepad2.left_stick_y > 0.3)
                 incheietura.setPosition(0.75);
 
-            if(gamepad2.dpad_down)
+            if(gamepad2.left_trigger == 1)
                 gheara.setPosition(0.2);
 
-            if(gamepad2.dpad_up)
+            if(gamepad2.right_trigger == 1)
                 gheara.setPosition(0.57);
         });
 
