@@ -14,11 +14,10 @@ public class AutonomieAproape extends LinearOpMode {
     private final String[] names = {"LeftFront", "LeftBack", "RightFront", "RightBack"};
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         Servo incheietura = hardwareMap.servo.get("Incheietura");
         DcMotor macara = hardwareMap.dcMotor.get("Macara");
-        incheietura.setPosition(.4);
+        incheietura.setPosition(.75);
         macara.setTargetPosition(70);
         macara.setMode(RUN_TO_POSITION);
         macara.setPower(0.3);
@@ -32,7 +31,8 @@ public class AutonomieAproape extends LinearOpMode {
         motors[3].setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
         if(isStopRequested()) return;
-        runForward(3);
+        runForward(2.5);
+        while(opModeIsActive());
     }
     private void runForward(double requiredTime)
     {
@@ -43,5 +43,10 @@ public class AutonomieAproape extends LinearOpMode {
         while(requiredTime > el.time());
         el.reset();
         for(int i = 0; i < 4; i++) motors[i].setPower(0);
+        Servo gheara = hardwareMap.servo.get("Gheara");
+        Servo incheietura = hardwareMap.servo.get("Incheietura");
+        incheietura.setPosition(0.6);
+//        Thread.sleep(200);
+        gheara.setPosition(0.2);
     }
 }
