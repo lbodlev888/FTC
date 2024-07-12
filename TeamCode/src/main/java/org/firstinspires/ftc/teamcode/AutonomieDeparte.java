@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_TO_POSITION;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,7 +17,11 @@ public class AutonomieDeparte extends LinearOpMode {
     public void runOpMode()
     {
         Servo incheietura = hardwareMap.servo.get("Incheietura");
+        DcMotor macara = hardwareMap.dcMotor.get("Macara");
         incheietura.setPosition(.4);
+        macara.setTargetPosition(70);
+        macara.setMode(RUN_TO_POSITION);
+        macara.setPower(0.3);
         for(int i = 0; i < 4; i++)
         {
             motors[i] = hardwareMap.dcMotor.get(names[i]);
