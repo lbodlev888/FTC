@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
-public class DriveSetup extends LinearOpMode {
-    private DcMotor[] motors = new DcMotor[4];
-    private String[] names = {"LeftFront", "LeftBack", "RightFront", "RightBack"};
+public class AutonomieDeparte extends LinearOpMode {
+    private final DcMotor[] motors = new DcMotor[4];
+    private final String[] names = {"LeftFront", "LeftBack", "RightFront", "RightBack"};
 
     @Override
     public void runOpMode()
@@ -26,7 +26,7 @@ public class DriveSetup extends LinearOpMode {
         motors[3].setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
         if(isStopRequested()) return;
-        runForward(3);
+        runForward(6);
     }
     private void runForward(double requiredTime)
     {
